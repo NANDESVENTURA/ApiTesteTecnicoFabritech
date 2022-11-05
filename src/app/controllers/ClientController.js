@@ -106,32 +106,19 @@ class ClientController {
             if(!(await schema.isValid(req.body))) {
                 return res.status(400).json({ error: 'Validation fails'});
             };
-            const { id } = req.params;
+            const { id } = req.params;            
             const client = await Client.findByPk(id);
+
             if(!client){
                 return(404).json({ error: 'Client dont exists'});
-            }
-
-            if (email && email != client.email){
-                const clientExists = await Client.findOne({ where: {email, cpf}});
-
-                if(clientExists) {
-                    return res.status(400).json({ error: 'Client already exists.'})
-                }
-            }
-
-            const {name, email, telephone, cpf, birth_date, mother_name, father_name, cep, address, number, district, city, state} = 
+            }            
+            
+            const {telephone, cep, address, number, district, city, state} = 
             await client.update(req.body);
             
             return res.status(201).json ({
-                id,
-                name,
-                email,
-                telephone,
-                cpf,
-                birth_date,
-                mother_name,
-                father_name,
+                id,                
+                telephone,        
                 cep,
                 address,
                 number,
@@ -141,6 +128,7 @@ class ClientController {
             });
 
         } catch (error) {
+            console.log(error);
             return res.status(500).json({ message: 'Something went wrong'})
         }
     }
