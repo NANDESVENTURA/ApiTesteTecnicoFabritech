@@ -1,5 +1,7 @@
 import * as Yup from 'yup';
 import User from '../models/User';
+import jwt from 'jsonwebtoken';
+import authConfig from '../../config/auth';
 
 class UserController {
     async create (req,res) {
@@ -23,9 +25,15 @@ class UserController {
             const {id, name, email} = await User.create(req.body);
             
             return res.status(201).json({
-                id,
-                name,
-                email
+                user:{
+                    id,
+                    name,
+                    email
+                },
+                token: jwt.sign({ id}, authConfig.secret, {
+                    expiresIn: authConfig.expiresIn,
+                }),
+                msg:"registration successful"
             });
             
         } catch (error) {

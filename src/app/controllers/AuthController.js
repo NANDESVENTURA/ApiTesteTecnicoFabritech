@@ -41,6 +41,7 @@ class AuthController {
                 token: jwt.sign({ id}, authConfig.secret, {
                     expiresIn: authConfig.expiresIn,
                 }),
+                msg:"login successful"
             })
         } catch (error) {
             return res.status(500).json({ message: 'Something went wrong'});
